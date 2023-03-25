@@ -1,0 +1,4 @@
+chown -h 1000:1000 './[ChatGPT]Cordova-Bash+NodeJS.txt'
+chmod 0777 './[ChatGPT]Cordova-Bash+NodeJS.txt'
+/usr/bin/touch -hcmd "2023-03-25 13:33:23.0000000000 -0300" './[ChatGPT]Cordova-Bash+NodeJS.txt'
+/usr/bin/touch -hcad "2023-03-25 16:34:59.0725865000 -0300" './[ChatGPT]Cordova-Bash+NodeJS.txt'
