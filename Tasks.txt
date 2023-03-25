@@ -1,0 +1,7 @@
+Bash script:
+- compile AppPlayer from this Boilerplate
+- compile an Electron/Cordova app from FMWK-C2
+
+Unify AppPlayer with this Boilerplate's code (get inspiration from Floflis Central app)
+
+Unify Electron and Cordova
