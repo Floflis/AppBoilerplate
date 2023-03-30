@@ -1,0 +1,485 @@
+"A Cinnamon desklet could adapt and change the form accordingly to a command it get.
+
+In this case, Cinnamon desklets could turn into a "Live Tile" mode inside a start menu applet."
+
+That sounds like an interesting idea. Cinnamon desklets are already quite versatile in terms of their ability to be customized and updated based on user input or system events. It's definitely possible to design a Cinnamon desklet that can switch between different display modes or change its behavior based on user input.
+
+As for implementing a "Live Tile" mode inside a start menu applet, it would require some additional work beyond just creating a standard desklet. You would need to design the interface and functionality of the applet to support the Live Tile feature, as well as make sure it is compatible with the Cinnamon desktop environment.
+
+Overall, it is certainly possible to create a Cinnamon desklet that can adapt and change based on user input or system events. With some additional effort, it could be extended to include a "Live Tile" mode within a start menu applet as well.
+
+"Could Cinnamon desklets be converted from Cinnamon's JS to JS+HTML and back from JS+HTML to Cinnamon's JS?"
+
+Yes, it is possible to create Cinnamon desklets using HTML, CSS, and JavaScript, rather than just using Cinnamon's native JavaScript. This can be achieved by creating a webkit-based desklet and specifying the desklet's entry point as an HTML file.
+
+To create a webkit-based desklet, you can use the following command:
+cinnamon-desklet create-web-viewer
+
+This will create a basic webkit-based desklet that displays a web page. You can then modify the generated HTML, CSS, and JavaScript files to create your desired desklet.
+
+It is also possible to convert a Cinnamon desklet from Cinnamon's native JavaScript to JS+HTML by manually creating an HTML file and including the necessary JavaScript and CSS files. However, this may require significant effort depending on the complexity of the desklet.
+
+Similarly, it is possible to convert a desklet from JS+HTML back to Cinnamon's native JavaScript by extracting the relevant JavaScript and CSS code and integrating it into a Cinnamon desklet. Again, this may require significant effort depending on the complexity of the desklet.
+
+"How to port applets from Cinnamon to Gnome?
+
+Cinnamon uses a fork of Gnome's GJS, CJS."
+
+Porting applets from Cinnamon to Gnome can be a bit of a challenge as they use different JavaScript runtimes. Cinnamon uses a fork of Gnome's GJS called CJS, which is not compatible with the standard GJS runtime used by Gnome.
+
+To port a Cinnamon applet to Gnome, you'll need to rewrite the applet using the standard GJS runtime. This will likely involve updating the syntax of the code to conform to the standard, and replacing any Cinnamon-specific APIs with their Gnome equivalents.
+
+You may also need to make some adjustments to the applet's UI to conform to Gnome's user interface guidelines. Gnome's desktop environment has a different design philosophy than Cinnamon, so some elements of the applet's UI may need to be reworked to fit in with the Gnome aesthetic.
+
+Overall, porting a Cinnamon applet to Gnome can be a significant undertaking, but it's certainly possible with some time and effort.
+
+"Please write some sample files about a webkit Cinnamon desklet."
+
+Sure, here are some sample files for a webkit Cinnamon desklet:
+
+1. desklet.js
+
+const Desklet = imports.ui.desklet;
+
+function MyDesklet(metadata, desklet_id) {
+    this._init(metadata, desklet_id);
+}
+
+MyDesklet.prototype = {
+    __proto__: Desklet.Desklet.prototype,
+
+    _init: function(metadata, desklet_id) {
+        Desklet.Desklet.prototype._init.call(this, metadata);
+
+        this.set_name(_("My Desklet"));
+        this.set_icon_name("start-here");
+        this.set_title(_("My Desklet Title"));
+
+        this.setContent("");
+        this._webview = new WebKit.WebView();
+        this.setContent(this._webview);
+    },
+
+    on_desklet_removed: function() {
+        this._webview.destroy();
+    },
+
+    on_desklet_minimized: function() {
+        this._webview.execute_script("document.body.classList.add('hidden');");
+    },
+
+    on_desklet_restored: function() {
+        this._webview.execute_script("document.body.classList.remove('hidden');");
+    },
+
+    on_desklet_clicked: function() {
+        this._webview.load_uri("http://example.com");
+    }
+};
+
+function main(metadata, desklet_id) {
+    return new MyDesklet(metadata, desklet_id);
+}
+
+2. metadata.json
+
+{
+    "uuid": "my-desklet@myusername",
+    "name": "My Desklet",
+    "description": "A simple desklet with a WebKit view",
+    "icon": "icon.png",
+    "version": "1.0",
+    "cinnamon-version": "4.0",
+    "author": "My Name <myemail@example.com>",
+    "website": "http://example.com",
+    "uuid": "my-desklet@myusername"
+}
+
+3. desklet.css
+
+.hidden {
+    display: none !important;
+}
+
+4. icon.png (replace with your own icon file)
+
+Place all these files in a folder named "my-desklet@myusername" (or any name of your choice) in ~/.local/share/cinnamon/desklets directory. Then restart Cinnamon or run cinnamon --replace in the terminal to load the desklet.
+
+"Could you write a sample index.html for such applet and change desklet.js accordingly so using the index.html instead of the http://example.com?"
+
+Sure, here's a sample index.html file that you can use for your WebKit-based Cinnamon desklet:
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>My WebKit Desklet</title>
+	<style type="text/css">
+		body {
+			background-color: #F0F0F0;
+			font-family: sans-serif;
+			font-size: 14px;
+			margin: 0;
+			padding: 0;
+		}
+		.container {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+		.logo {
+			width: 50px;
+			height: 50px;
+			background-color: #222;
+			border-radius: 50%;
+			margin-bottom: 10px;
+		}
+		.title {
+			font-weight: bold;
+			font-size: 18px;
+			margin-bottom: 10px;
+		}
+		.message {
+			color: #777;
+			margin-bottom: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="logo"></div>
+		<div class="title">My WebKit Desklet</div>
+		<div class="message">Hello, World!</div>
+	</div>
+</body>
+</html>
+
+And here's an updated desklet.js file that loads the index.html file from the desklet's folder:
+
+const Lang = imports.lang;
+const Gtk = imports.gi.Gtk;
+const WebKit = imports.gi.WebKit2;
+
+const Desklet = imports.ui.desklet;
+
+function MyDesklet(metadata, desklet_id) {
+    this._init(metadata, desklet_id);
+}
+
+MyDesklet.prototype = {
+    __proto__: Desklet.Desklet.prototype,
+
+    _init: function(metadata, desklet_id) {
+        Desklet.Desklet.prototype._init.call(this, metadata, desklet_id);
+
+        this._webview = new WebKit.WebView();
+        this.setContent(this._webview);
+
+        let html_path = this.getPath() + '/index.html';
+        this._webview.load_uri(html_path);
+    }
+};
+
+function main(metadata, desklet_id) {
+    return new MyDesklet(metadata, desklet_id);
+}
+
+Note that in the MyDesklet constructor, we're now loading the index.html file from the desklet's folder using the getPath() method, and passing the file path to the load_uri() method of the WebView object.
+
+"Awesome! It mean FrameworkJS could support Cinnamon desklets as well!
+
+BTW, can applets use webkit so as the desklets?"
+
+Yes, applets can also use WebKit to display web content within the applet. In fact, the Cinnamon Desklet API provides a WebKitWebView object that can be used to display web content within a desklet. Similarly, Gnome Shell provides a St.Widget object that can be used to display web content within an extension.
+
+"Can the index.html file interact with the desklet/applet's JS?
+
+For example, user clicks a button in index.html and a Bash script is run from the desklet/applet?"
+
+Yes, it is possible for the index.html file to interact with the desklet/applet's JS. One way to achieve this is by using the ipcRenderer module provided by Electron.
+
+In your index.html file, you can define a button and attach a click event listener to it. When the button is clicked, you can use the ipcRenderer module to send a message to the main process of the Electron app, which can then execute a Bash script.
+
+Here's an example code snippet for the index.html file:
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>My Desklet</title>
+  </head>
+  <body>
+    <button id="run-script-button">Run Script</button>
+    <script>
+      const { ipcRenderer } = require('electron');
+      
+      document.getElementById('run-script-button').addEventListener('click', () => {
+        ipcRenderer.send('run-script');
+      });
+    </script>
+  </body>
+</html>
+
+In this example, the ipcRenderer module is imported at the beginning of the <script> tag. The addEventListener() method is used to attach a click event listener to the button with the ID run-script-button. When the button is clicked, the ipcRenderer.send() method is used to send a message to the main process of the Electron app with the identifier 'run-script'.
+
+In the desklet/applet's JS, you can listen for this message using the ipcMain module. When the message is received, you can execute a Bash script using the child_process module.
+
+Here's an example code snippet for the desklet.js file:
+
+const { app, BrowserWindow, ipcMain } = require('electron');
+const { exec } = require('child_process');
+
+let mainWindow;
+
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: true
+    }
+  });
+
+  mainWindow.loadFile('index.html');
+
+  mainWindow.on('closed', function () {
+    mainWindow = null;
+  });
+}
+
+app.on('ready', createWindow);
+
+ipcMain.on('run-script', () => {
+  exec('bash /path/to/script.sh', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+    console.error(`stderr: ${stderr}`);
+  });
+});
+
+In this example, the ipcMain module is imported at the beginning of the file. The app.on('ready', createWindow) function is used to create the main window and load the index.html file. The ipcMain.on() method is used to listen for the 'run-script' message. When the message is received, the exec() method is used to execute a Bash script located at /path/to/script.sh. Any output from the script is logged to the console.
+
+"What Electron have to do with Cinnamon's desklets/applets?"
+
+Electron is a framework for building desktop applications using web technologies such as HTML, CSS, and JavaScript. It provides a way to package web applications as native desktop applications that can run on various platforms such as Windows, macOS, and Linux.
+
+Cinnamon's desklets and applets are also built using web technologies such as HTML, CSS, and JavaScript, but they are specifically designed to be used as small applets on the Cinnamon desktop environment for Linux. While Electron can be used to build similar desktop applications, it is not directly related to Cinnamon's desklets and applets.
+
+However, some of the concepts and techniques used in Electron, such as packaging web applications as native desktop applications and using web technologies to build desktop applications, may be applicable to building Cinnamon desklets and applets as well.
+
+"But you've exemplified about Electron's ipcMain module... ...in a Cinnamon desklet/applet!
+
+What I asked before is, if a Cinnamon's desklet/applet using WebKit can interact with the index.html file they are rendering."
+
+My apologies for the confusion. To answer your question, yes, a Cinnamon desklet/applet using WebKit can interact with the index.html file they are rendering.
+
+The index.html file can use JavaScript to interact with the Cinnamon desklet/applet's JavaScript code through the WebKit interface. This can be done by sending messages between the two scripts using the window.webkit.messageHandlers object, which allows the desklet/applet script to receive and handle events triggered by the index.html file, and vice versa.
+
+For example, if the user clicks a button in the index.html file, the index.html file can send a message to the desklet/applet script using window.webkit.messageHandlers with the necessary data. The desklet/applet script can then handle this message and execute the appropriate Bash script. Similarly, the desklet/applet script can also send messages to the index.html file, allowing the index.html file to be updated or modified based on user actions or other events happening in the desklet/applet.
+
+[...]
+
+"Please write a sample about the previous topic, that was the WebKit Cinnamon desklet.
+
+index.html should have a button that will communicate with desklet.js so it will run a Bash script."
+
+Sure, here's an example of how you could implement a button in index.html that, when clicked, communicates with desklet.js to run a Bash script:
+
+index.html:
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Desklet</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<h1>My Desklet</h1>
+	<button id="myButton">Run Bash Script</button>
+
+	<script>
+		const button = document.getElementById('myButton');
+		button.addEventListener('click', async () => {
+			const response = await window.desklet.runScript();
+			console.log(response);
+		});
+	</script>
+</body>
+</html>
+
+In this example, the button element is assigned an id of myButton so it can be accessed with JavaScript. An event listener is added to the button that listens for the click event. When the button is clicked, the runScript method is called on the window.desklet object, which is assumed to be available in the global scope.
+
+desklet.js:
+
+const St = imports.gi.St;
+const Gtk = imports.gi.Gtk;
+const WebKit = imports.gi.WebKit2;
+
+const Mainloop = imports.mainloop;
+
+const Desklet = imports.ui.desklet;
+
+function MyApplet(metadata, desklet_id) {
+	this._init(metadata, desklet_id);
+}
+
+MyApplet.prototype = {
+	__proto__: Desklet.Desklet.prototype,
+
+	_init: function(metadata, desklet_id) {
+		Desklet.Desklet.prototype._init.call(this, metadata, desklet_id);
+
+		// Create the web view
+		this._webView = new WebKit.WebView();
+
+		// Set the web view settings
+		const settings = this._webView.get_settings();
+		settings.set_allow_file_access_from_file_urls(true);
+		settings.set_allow_universal_access_from_file_urls(true);
+		settings.set_javascript_can_access_clipboard(true);
+
+		// Load the index.html file
+		this._webView.load_uri('file:///path/to/index.html');
+
+		// Add the web view to the desklet
+		this.setContent(this._webView);
+	},
+
+	runScript: function() {
+		return new Promise((resolve, reject) => {
+			// Run the Bash script
+			// Replace `/path/to/script.sh` with the actual path to your script
+			const script = '/path/to/script.sh';
+			const [success, stdout, stderr, exitCode] = GLib.spawn_command_line_sync(script);
+
+			// Log the output of the Bash script to the console
+			const output = `${stdout}${stderr}`;
+			console.log(output);
+
+			if (success) {
+				resolve(output);
+			} else {
+				reject(output);
+			}
+		});
+	}
+};
+
+function main(metadata, desklet_id) {
+	return new MyApplet(metadata, desklet_id);
+}
+
+In this example, the runScript method is defined on the MyApplet prototype. When this method is called, it runs the Bash script specified by the script variable and returns a promise that resolves with the output of the script. The output is also logged to the console for debugging purposes.
+
+Note that you will need to replace the /path/to placeholders in both index.html and desklet.js with the actual file paths on your system. Additionally, you may need to modify the web view settings to allow access to certain resources, depending on the content of your index.html file.
+
+"Could FrameworkJS (that will do the same to enable KaiOS apps to run on both KaiOS 2.x and KaiOS 3.x while keeping the same codebase) enable WebKit applets to work both on Cinnamon and Gnome Flashback? So these multiplatform applets could adapt their script according to the platform."
+
+Yes, FrameworkJS can be used to create multiplatform applets that work on both Cinnamon and Gnome Flashback using WebKit. The applets can adapt their scripts according to the platform by detecting the environment and changing the behavior accordingly.
+
+Here's an example of how this could be done:
+
+1. First, create a base HTML file for the applet that contains the necessary markup and styles. This file should be generic enough to work on both Cinnamon and Gnome Flashback. For example:
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Multiplatform Applet</title>
+  <style>
+    /* Shared styles */
+  </style>
+</head>
+<body>
+  <div id="applet-container">
+    <!-- Applet content goes here -->
+  </div>
+  <script src="applet.js"></script>
+</body>
+</html>
+
+2. Next, create a separate JavaScript file for each platform (Cinnamon and Gnome Flashback) that contains the platform-specific code. For example, applet-cinnamon.js and applet-gnome.js.
+
+3. In each platform-specific JavaScript file, detect the platform using FrameworkJS's environment detection methods, and then modify the behavior of the applet accordingly. For example:
+
+applet-cinnamon.js:
+
+if (Framework.platform.isCinnamon()) {
+  // Cinnamon-specific behavior goes here
+  function runBashScript() {
+    // Run a Bash script
+  }
+} else {
+  // Gnome Flashback-specific behavior goes here
+  function runBashScript() {
+    // Run a different Bash script
+  }
+}
+
+applet-gnome.js:
+
+if (Framework.platform.isGnomeFlashback()) {
+  // Gnome Flashback-specific behavior goes here
+  function runBashScript() {
+    // Run a different Bash script
+  }
+} else {
+  // Cinnamon-specific behavior goes here
+  function runBashScript() {
+    // Run a Bash script
+  }
+}
+
+4. Finally, load the appropriate JavaScript file based on the detected platform in desklet.js. For example:
+
+if (Framework.platform.isCinnamon()) {
+  // Load the Cinnamon-specific applet JavaScript file
+  document.querySelector('script').src = 'applet-cinnamon.js';
+} else {
+  // Load the Gnome Flashback-specific applet JavaScript file
+  document.querySelector('script').src = 'applet-gnome.js';
+}
+
+With this setup, the applet can detect the platform and adapt its behavior accordingly, allowing it to work on both Cinnamon and Gnome Flashback using the same codebase.
+
+"You've used the "desklet.js" naming for an applet! This is wrong. Applets use "applet.js", no?!"
+
+You are correct! I apologize for the mistake. In Cinnamon, the JavaScript file for an applet is indeed named applet.js, not desklet.js. Thank you for bringing this to my attention.
+
+"What is the difference in the applets' metadata.json file between Cinnamon and Gnome Flashback?"
+
+While there are many similarities between the metadata.json files used by Cinnamon and Gnome Flashback applets, there are some differences as well.
+
+In Cinnamon, the metadata.json file includes the following fields:
+
+"uuid": A unique identifier for the applet.
+"name": The display name of the applet.
+"description": A description of the applet.
+"version": The version number of the applet.
+"author": The author of the applet.
+"website": The website for the applet.
+"documentation": The documentation for the applet.
+"prefs": An array of preference options for the applet.
+
+In Gnome Flashback, the metadata.json file includes the following fields:
+
+"name": The display name of the applet.
+"description": A description of the applet.
+"version": The version number of the applet.
+"icon": The name of the icon file for the applet.
+"type": The type of applet (e.g. "DockItem").
+"panel": The panel where the applet should be displayed.
+"position": The position of the applet on the panel.
+"object-type": The type of object used to create the applet.
+"object-path": The path to the object used to create the applet.
+"preferences": An array of preference options for the applet.
+
+As you can see, while both metadata.json files include similar fields like name, description, and version, there are some differences in the specific fields used by each platform. It's important to keep these differences in mind when developing applets for Cinnamon and Gnome Flashback.
